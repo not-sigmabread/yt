@@ -1,1 +1,11 @@
-$${\color{blue}Better \space \color{blue} Than \space \color {blue}safeshare}$$
+## Better than safeshare
+better fr
+
+## installing
+
+`npm install`, if it doesnt work when starting, try:
+`npm install axios`
+
+## starting the server
+
+`node server.js`
