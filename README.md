@@ -7,4 +7,4 @@ npm install if there is extra you would do "*npm install axios*", since if anyth
 
 # start the server
 
-start the server with *`node.js`*
+start the server with *`node server.js`*
