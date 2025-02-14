@@ -1,9 +1,8 @@
-```markdown
-# <span style="color:blue">YT - Better Version of Safeshare</span>
+# <span style="color:navy">YT - Better Version of Safeshare</span>
 
-<span style="color:darkorange">A superior alternative to Safeshare.</span>
+<span style="color:darkgoldenrod">A superior alternative to Safeshare.</span>
 
-## <span style="color:green">Installation</span>
+## <span style="color:forestgreen">Installation</span>
 
 To install the necessary dependencies, run the following command:
 
