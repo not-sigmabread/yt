@@ -1,11 +1,10 @@
-## better version of safeshare fr
-better than safeshare
+# <span style="color:blue">YT - Better Version of Safeshare</span>
 
-## installing
+<span style="color:darkorange">A superior alternative to Safeshare.</span>
 
-npm install 
-if there is extra you would do "*npm install axios*", since if anything it would be that one that didnt install.
+## <span style="color:green">Installation</span>
 
-## start the server
+To install the necessary dependencies, run the following command:
 
-start the server with *`node server.js`*
+```sh
+npm install
