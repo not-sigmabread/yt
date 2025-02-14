@@ -1,0 +1,25 @@
+{
+  "name": "safeshare-clone",
+  "version": "1.0.0",
+  "description": "A clone of SafeShare.tv for sharing YouTube and Vimeo videos safely.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2"
+  },
+  "author": "sigmabread",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sigmabread/yt.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/sigmabread/yt/issues"
+  },
+  "homepage": "https://github.com/sigmabread/yt#readme"
+}
