@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeView Shorts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .header {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 20px 0;
+            color: #00bcd4;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .shorts-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            height: calc(100vh - 100px);
+            padding: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+        }
+
+        .shorts-video {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .shorts-video video {
+            width: 100%;
+            height: auto;
+            border: none;
+            border-radius: 12px;
+        }
+
+        .shorts-footer {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .scroll-button {
+            position: fixed;
+            right: 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            transition: background-color 0.3s;
+        }
+
+        .scroll-button:hover {
+            background-color: #e91e63;
+        }
+
+        .scroll-up {
+            top: 50%;
+            transform: translateY(-100%);
+        }
+
+        .scroll-down {
+            bottom: 50%;
+            transform: translateY(100%);
+        }
+
+        .loading-message {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Custom scrollbar styles */
+        .shorts-container::-webkit-scrollbar {
+            width: 10px;
+        }
+        .shorts-container::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 8px;
+        }
+        .shorts-container::-webkit-scrollbar-thumb {
+            background: #ff4081;
+            border-radius: 8px;
+        }
+        .shorts-container::-webkit-scrollbar-thumb:hover {
+            background: #e91e63;
+        }
+
+        /* Remove horizontal scroll */
+        .shorts-container::-webkit-scrollbar {
+            height: 0;  /* Remove scrollbar space */
+            background: transparent;  /* Optional: just make scrollbar invisible */
+        }
+        .shorts-container {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">SafeView Shorts</div>
+    <div class="shorts-container" id="shortsContainer"></div>
+    <div class="shorts-footer">Powered by SafeView</div>
+
+    <button class="scroll-button scroll-up" onclick="scrollUp()">&#9650;</button>
+    <button class="scroll-button scroll-down" onclick="scrollDown()">&#9660;</button>
+
+    <script>
+        let currentShortIndex = 0;
+        let shortsQueue = [];
+        let loading = false;
+        let viewedShorts = new Set();
+
+        async function fetchShorts(min = 7, max = 8) {
+            if (loading) return;
+            loading = true;
+            try {
+                const response = await fetch('/getShorts');
+                const data = await response.json();
+                const randomShorts = getRandomElements(data, min, max);
+                const uniqueShorts = randomShorts.filter(video => !viewedShorts.has(video.id.videoId));
+                const videoUrls = uniqueShorts.map(video => `https://www.youtube.com/watch?v=${video.id.videoId}`);
+                videoUrls.forEach(url => viewedShorts.add(url.split('v=')[1]));
+                await processMultipleShorts(videoUrls);
+            } catch (error) {
+                console.error('Error fetching YouTube Shorts:', error);
+            } finally {
+                loading = false;
+            }
+        }
+
+        function getRandomElements(array, min, max) {
+            const count = Math.floor(Math.random() * (max - min + 1)) + min;
+            const shuffled = array.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        async function processMultipleShorts(videoUrls) {
+            try {
+                const response = await fetch('/createMultipleShortViews', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ videoUrls })
+                });
+                const data = await response.json();
+                shortsQueue = shortsQueue.concat(data.videoIds);
+                if (shortsQueue.length > 0 && currentShortIndex === 0) {
+                    displayShort(shortsQueue[currentShortIndex]);
+                }
+            } catch (error) {
+                console.error('Error processing shorts:', error);
+            }
+        }
+
+        function displayShort(videoId) {
+            const shortsContainer = document.getElementById('shortsContainer');
+            const videoUrl = `/videos/${videoId}`;
+
+            shortsContainer.innerHTML = `
+                <div class="shorts-video">
+                    <video autoplay controls>
+                        <source src="${videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            `;
+        }
+
+        function scrollUp() {
+            if (currentShortIndex > 0) {
+                currentShortIndex--;
+                displayShort(shortsQueue[currentShortIndex]);
+            }
+        }
+
+        function scrollDown() {
+            if (currentShortIndex < shortsQueue.length - 1) {
+                currentShortIndex++;
+                displayShort(shortsQueue[currentShortIndex]);
+                if (currentShortIndex >= shortsQueue.length - 4) {
+                    fetchShorts(4, 5);
+                }
+            } else {
+                // Show loading message if user reaches the end of the queue
+                const shortsContainer = document.getElementById('shortsContainer');
+                shortsContainer.innerHTML = `<div class="loading-message">Loading more shorts...</div>`;
+                fetchShorts(4, 5);
+            }
+        }
+
+        // Fetch and process the initial shorts on page load
+        window.onload = () => fetchShorts(7, 8);
+    </script>
+ ▋
