@@ -3,7 +3,8 @@ better than safeshare
 
 ## installing
 
-npm install if there is extra you would do "*npm install axios*", since if anything it would be that one that didnt install.
+npm install 
+if there is extra you would do "*npm install axios*", since if anything it would be that one that didnt install.
 
 ## start the server
 
