@@ -1,25 +1,18 @@
 {
   "name": "safeshare-clone",
   "version": "1.0.0",
-  "description": "A clone of SafeShare.tv for sharing YouTube and Vimeo videos safely.",
+  "description": "A SafeShare clone with YouTube shorts functionality.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "install-dependencies": "npm install express body-parser axios && pip install yt-dlp",
+    "start": "npm run install-dependencies && node server.js"
   },
   "dependencies": {
-    "axios": "^1.7.9",
-    "body-parser": "^1.20.3",
-    "express": "^4.21.2"
-  },
-  "author": "sigmabread",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sigmabread/yt.git"
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
   },
   "keywords": [],
-  "bugs": {
-    "url": "https://github.com/sigmabread/yt/issues"
-  },
-  "homepage": "https://github.com/sigmabread/yt#readme"
+  "author": "",
+  "license": "ISC"
 }
