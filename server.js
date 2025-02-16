@@ -364,7 +364,7 @@ function generateProcessingPage(videoId) {
 
 function downloadVideo(url, outputPath) {
     return new Promise((resolve, reject) => {
-        exec(`yt-dlp -f 'best[ext=mp4]' --no-part -o "${outputPath}" ${url}`, (error, stdout, stderr) => {
+        exec(`./run-yt-dlp.sh yt-dlp -f 'best[ext=mp4]' --no-part -o "${outputPath}" ${url}`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error downloading video: ${stderr}`);
                 return reject(error);
