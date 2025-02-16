@@ -4,8 +4,8 @@
   "description": "A SafeShare clone with YouTube shorts functionality.",
   "main": "server.js",
   "scripts": {
-    "install-dependencies": "npm install express body-parser axios && pip install yt-dlp",
-    "start": "npm run install-dependencies && node server.js"
+    "postinstall": "pip install yt-dlp",
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
